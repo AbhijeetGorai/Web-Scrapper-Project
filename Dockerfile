@@ -1,5 +1,5 @@
-# Use Python 3.9 as base image
-FROM python:3.9-slim
+# Use Python 3.10 as base image
+FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
@@ -11,13 +11,13 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire project
-COPY src/ ./src/
+COPY src/web_scrapper /app/web_scrapper
 
 # Set Python path
-ENV PYTHONPATH=/app
+ENV PYTHONPATH="${PYTHONPATH}:/app"
 
 # Expose port 8000
 EXPOSE 8000
 
 # Command to run the FastAPI server
-CMD ["python", "src/web_scrapper/run_server.py"] 
+CMD ["uvicorn", "web_scrapper.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
